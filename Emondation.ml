@@ -68,3 +68,39 @@ let an1  = {sigmaN= ['a';'b'] ; nN = 6; initN = [1] ;
 
 (* Alphabet augmenté *)	
 let sigmaAug = ['a';'b';'é'];;
+
+(* I. Déterminer les états accessibles *)
+
+
+let rec eAccessibles (aut : afn) (i : int) (s : char list) = match s with
+	p::s -> try 
+				let l = transitN(aut, i, p) in union l (eAccessibles aut i s)
+			with _ -> [i];;
+(* Tests *)
+eAccessibles an1 1 sigmaAug ;; (*- : int list = [1 ; 3]*)
+eAccessibles an1 3 sigmaAug ;; (*- : int list = [3 ; 5 ; 4]*)
+
+		
+let rec eAccessiblesListe (aut : afn) (li : int list) = match li with
+	(i::li) -> union (eAccessibles aut i sigmaAug) (eAccessiblesListe aut li)
+	| [] -> [];;
+
+(* Tests *)
+eAccessiblesListe an1 [2 ;6] ;; (*- : int list = [6 ; 5 ; 1 ; 2]*)
+
+
+let rec auxParcours (aut : afn) (li : int list) = match li with
+	li -> let suc = eAccessiblesListe aut li in if long li = long suc then suc
+												else union suc (auxParcours aut suc);;
+												
+(* Tests *)
+auxParcours an1 [2 ; 3] ;; (* - : int list = [6; 3; 5; 4; 1; 2] *)
+auxParcours an1 [1] ;; (* - : int list = [6; 5; 4; 1; 3] *)
+
+
+let rec etatsAccessibles (aut : afn) = match aut with
+	aut -> let init = aut.initN in auxParcours aut init;;
+	
+etatsAccessibles an1 ;; (*- : int list = [6 ; 5 ; 4 ; 1 ; 3]*)
+
+
