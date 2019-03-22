@@ -104,3 +104,15 @@ let rec etatsAccessibles (aut : afn) = match aut with
 etatsAccessibles an1 ;; (*- : int list = [6 ; 5 ; 4 ; 1 ; 3]*)
 
 
+(* II. Construction de l’automate inverse, recherche des sommets coaccessibles *)
+
+let autoVide = function
+	aut -> let (auto : afn) = {sigmaN= aut.sigmaN ; 
+								nN = aut.nN ; 
+								initN = aut.initN ; 
+								eN = function c -> { acceptN = (let z = aut.eN(c) in z.acceptN) ; 
+									tN = function	
+										_ -> raise PasTransition }} in auto;;
+
+(* Tests *)
+let test1 = autoVide an1 ;; (* val test1 : afn = {sigmaN = ['a' ; 'b'] ; nN = 6 ; initN = [1] ; eN = <fun>} *)
