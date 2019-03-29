@@ -116,3 +116,40 @@ let autoVide = function
 
 (* Tests *)
 let test1 = autoVide an1 ;; (* val test1 : afn = {sigmaN = ['a' ; 'b'] ; nN = 6 ; initN = [1] ; eN = <fun>} *)
+
+let rajouteUne (aut : afn) ((q,c,q1) : (int*char*int)) = {sigmaN= aut.sigmaN ; nN = aut.nN ; initN = aut.initN ; 
+				eN = function 
+					etat -> if etat = q then { acceptN = (let x = aut.eN(q) in x.acceptN) ; 
+					tN = function	
+						car -> if car = c then 
+							(let y = aut.eN(q) in (try let z = y.tN(c) in [q1]@z with _ -> [q1]))
+							else let w = aut.eN(q) in w.tN(car)}
+						else aut.eN(etat)};;
+						
+(* Tests *)
+let test2 = rajouteUne test1(1,'a',3);;
+(test2.eN(1)).tN('a');;
+
+
+let rec rajoutePlusieurs (aut : afn) (l : (int * char * int)list) = match l with
+	((q, c, q1)::l1) -> let a = rajouteUne aut (q,c,q1) in rajoutePlusieurs aut l1
+	|[] -> aut;;
+	
+(* Tests *)
+let test4 = rajoutePlusieurs test1 [(3,'a',1);(4,'a',3);(5,'b',3)];;
+
+let rec liste_triplet (i : int)(c : char) = function
+	(a::l) -> (a,c,i)::(liste_triplet i c l)
+	|[] -> [];;
+	
+(* Tests *)
+liste_triplet 1'a'[2;3];;	
+	
+	
+exception PasEtats;;
+
+let auto_inverse (aut : afn) = function
+	aut -> (let aut2 = autoVide aut in 
+		let i = aut.initN in let rec aux (aut : afn) (i : int) = function
+				(a::c) -> let x = (aut.eN(i)) in (try let y = x.tN(a) in w::aux aut i c with _ -> PasEtats)
+	
