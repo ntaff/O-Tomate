@@ -58,7 +58,7 @@ let etatsAcceptants auto =
 (* val etatsAcceptants : afn -> int list = <fun> *)
 
 
-(* Exemple du TP *)
+(* Exemple *)
 
 let an1  = {sigmaN= ['a';'b'] ; nN = 3; initN = [1] ; 
 			eN = function	
