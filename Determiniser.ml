@@ -125,8 +125,16 @@ let rec qui_est_a_la_position (n : int) (l : 'a list) = match l with
 	|x::r -> qui_est_a_la_position (n-1) r;;
 	
 	
-	
-let rec aux 
-
 let autoDet (aut : afn) = 
+	let nouveauxetatsaut = nouveauxetats aut.nN in
+
+		{
+			sigma = aut.sigmaN ; 
+			n = long(nouveauxetataut) ; 
+			init = qui_est_en_position aut.initN nouveauxetatsaut ; 
+			e : function 
+				f -> accept
+			
+			;;
+		}
 	
